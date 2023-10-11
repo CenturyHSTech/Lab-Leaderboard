@@ -5,8 +5,16 @@ It will also change the background color based on whether students can
 use a hall pass or not"""
 
 # imports
+import time
 
 # define functions
+def get_time():
+    time.sleep(1)
+    currentTime = time.gmtime()
+    print(currentTime)
+
+while True:
+    get_time()
 
 
 if __name__ == "__main__":
