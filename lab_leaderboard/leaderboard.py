@@ -9,13 +9,12 @@ import time
 
 # define functions
 def get_time():
-    time.sleep(1)
+    time.sleep(0.5)
     currentTime = time.gmtime()
     print(currentTime)
 
 while True:
     get_time()
-
 
 if __name__ == "__main__":
     print("Here's where we'll test our code.")
