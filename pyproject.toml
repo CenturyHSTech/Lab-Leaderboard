@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "lab-leaderboard"
+version = "0.1.0"
+description = "A leaderboard for N105 that shows the day, period, time remaining in class and whether hall passes are allowed."
+authors = ["Hundredvisionsguy <cwinikka@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "lab_leaderboard"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+icalendar = "^5.0.10"
+requests = "^2.31.0"
+pytest = "^7.4.2"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
+isort = "^5.12.0"
+black = "^23.10.0"
+pre-commit = "^3.5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
