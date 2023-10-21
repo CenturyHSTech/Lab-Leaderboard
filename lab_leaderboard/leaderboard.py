@@ -15,6 +15,17 @@ TZ = timezone("US/Pacific")
 date = datetime.now() + timedelta(days=0)
 datefor = "%s" % date.strftime("%Y-%m-%d")
 
+# School Schedules
+MONDAY = {
+    "08:30-10:02": ("both", "class", "1st", "5th"),
+    "10:08-11:40": ("both", "class", "2nd", "6th"),
+    "11:40-12:14": ("north", "lunch"),
+    "11:46-13:18": ("south", "class", "3rd", "7th"),
+    "12:20-13:52": ("north", "class", "3rd", "7th"),
+    "13:18-13:52": ("south", "lunch"),
+    "13:52-15:30": ("both", "class", "4th", "8th"),
+}
+
 
 # define functions
 def get_time() -> tuple:
