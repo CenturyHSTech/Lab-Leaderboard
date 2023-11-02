@@ -1,14 +1,26 @@
 [tool.poetry]
 name = "lab-leaderboard"
 version = "0.1.0"
-description = ""
-authors = ["Winikka <winikkc@hsd.k12.or.us>"]
+description = "A leaderboard for N105 that shows the day, period, time remaining in class and whether hall passes are allowed."
+authors = ["Hundredvisionsguy <cwinikka@gmail.com>"]
+license = "MIT"
 readme = "README.md"
+packages = [{include = "lab_leaderboard"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+icalendar = "^5.0.10"
+requests = "^2.31.0"
 pytest = "^7.4.2"
+board = "^1.0"
+colorama = "^0.4.6"
+terminal = "^0.4.0"
 
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
+isort = "^5.12.0"
+black = "^23.10.0"
+pre-commit = "^3.5.0"
 
 [build-system]
 requires = ["poetry-core"]
