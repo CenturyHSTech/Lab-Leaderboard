@@ -81,21 +81,34 @@ def get_schedule():
     return schedule
 
 
-def get_time() -> tuple:
-    """returns a tuple to indicate the day, A Day or B Day, hour and minute
-
-    Returns:
-        time: a dictionary with 'day' and 'AorB' keys as strings and 'hour'
-            and 'min' as ints.
+def get_current_schedule():
     """
+    finds and returns the current schedule
+    dictionary entry based on the time and weekday
+    """
+    weekdaySchedule = get_schedule()
     now = datetime.now()
-    time = {
-        "day": now.day,
-        "AorB": results,
-        "hour": now.hour,
-        "min": now.minute,
-    }
-    return time
+    currentHour = now.hour
+    if currentHour < 10:
+        currentHour = "0" + str(currentHour)
+    currentMinute = now.minute
+    if currentMinute < 10:
+        currentMinute = "0" + str(currentHour)
+    militaryTime = str(currentHour) + ":" + str(currentMinute)
+    for i in range(len(weekdaySchedule)):
+        txt = list(weekdaySchedule)[i]
+        x = txt.split("-")
+        start, stop = x
+        if militaryTime < stop and militaryTime >= start:
+            if "lunch" in txt:
+                previousSchedule = weekdaySchedule.get(txt)
+                txt = list(weekdaySchedule)[i + 1]
+                nextSchedule = weekdaySchedule.get(txt)
+                currentSchedule = str(nextSchedule)
+                +"-" + str(previousSchedule)
+            else:
+                currentSchedule = weekdaySchedule.get(txt)
+    return currentSchedule
 
 
 def get_a_or_b_day(events: list) -> str:
@@ -154,8 +167,155 @@ def get_chs_events() -> list:
     return events
 
 
+def get_time() -> tuple:
+    """returns a tuple to indicate the day, A Day or B Day, hour and minute
+
+    Returns:
+        time: a dictionary with 'day' and 'AorB' keys as strings and 'hour'
+            and 'min' as ints.
+    """
+    now = datetime.now()
+    time = {
+        "day": now.day,
+        "AorB": (get_a_or_b_day(get_chs_events())),
+        "hour": now.hour,
+        "min": now.minute,
+    }
+    return time
+
+
+def get_current_activity_range():
+    """
+    finds and returns the duration of the current
+    activity in the format of time-time
+    """
+    weekdaySchedule = get_schedule()
+    now = datetime.now()
+    currentHour = now.hour
+    if currentHour < 10:
+        currentHour = "0" + str(currentHour)
+    currentMinute = now.minute
+    if currentMinute < 10:
+        currentMinute = "0" + str(currentHour)
+    for i in range(len(weekdaySchedule)):
+        txt = list(weekdaySchedule)[i]
+    return txt
+
+
+def get_pass_status():
+    """
+    finds whether or not it is ok to give out passes
+    and returns a message based on the current time vs the start and end time
+    """
+    now = datetime.now()
+    currentHour = now.hour
+    if currentHour < 10:
+        currentHour = "0" + str(currentHour)
+    currentMinute = now.minute
+    if currentMinute < 10:
+        currentMinute = "0" + str(currentHour)
+    txt = get_current_activity_range()
+    x = str(txt).split("-")
+    start, stop = x
+    startHour, startMinute = start.split(":")
+    endHour, endMinute = stop.split(":")
+    if (int(currentHour) == int(startHour)) and (
+        int(currentMinute) <= (int(startMinute) + 10)
+    ):
+        passStatus = "too early"
+    elif (int(currentHour) == int(endHour)) and (
+        int(currentMinute) >= (int(endMinute) - 10)
+    ):
+        passStatus = "too late"
+    else:
+        passStatus = "OK"
+    return passStatus
+
+
+def get_schedule_info():
+    """
+    gets info about the current schedule and displays it
+    """
+    schedule = get_current_schedule()
+    if "-" in schedule:
+        lunchSchedule, classSchedule = schedule.split("-")
+        activity = schedule[1]
+        lunchHallDirection = lunchSchedule[0]
+        classHallDirection = classSchedule[0]
+        AorB = get_a_or_b_day(get_chs_events())
+        if AorB == "A Day":
+            period = classSchedule[2]
+        elif AorB == "B Day":
+            period = classSchedule[3]
+        else:
+            period = "No school"
+        passStatus = get_pass_status()
+        standardTime = get_standard_time()
+        scheduleInfo = (
+            "It is currently "
+            + str(standardTime)
+            + ". In "
+            + str(lunchHallDirection)
+            + " hall it is lunch"
+            + " in "
+            + str(classHallDirection)
+            + " hall, class is "
+            + "being held. And it is currently "
+            + str(period)
+            + " period. It is "
+            + str(passStatus)
+            + " to give passes."
+        )
+    else:
+        activity = schedule[1]
+        hallDirection = schedule[0]
+        AorB = get_a_or_b_day(get_chs_events())
+        if AorB == "A Day":
+            period = schedule[2]
+        elif AorB == "B Day":
+            period = schedule[3]
+        else:
+            period = "No school"
+        passStatus = get_pass_status()
+        standardTime = get_standard_time()
+        scheduleInfo = (
+            "It is currently "
+            + str(standardTime)
+            + ". "
+            + str(activity)
+            + " is being held in "
+            + str(hallDirection)
+            + " hall(s). And it is currently "
+            + str(period)
+            + " period. It is "
+            + str(passStatus)
+            + " to give passes."
+        )
+    return scheduleInfo
+
+
+def get_standard_time():
+    """
+    returns a variable displaying the current time
+    in standard format
+    """
+    now = datetime.now()
+    currentHour = now.hour
+    if currentHour > 12:
+        currentHour = currentHour - 12
+        AMorPM = "PM"
+    elif currentHour < 10:
+        currentHour = "0" + str(currentHour)
+    currentMinute = now.minute
+    if currentMinute < 10:
+        currentMinute = "0" + str(currentHour)
+    standardTime = str(currentHour) + ":"
+    standardTime += str(currentMinute) + " "
+    standardTime += str(AMorPM)
+    return standardTime
+
+
 if __name__ == "__main__":
     print("Here's where we'll test our code.")
-    # results = get_chs_events()
-    # print(get_time())
-    print(get_schedule())
+    results = get_chs_events()
+    print(get_schedule_info())
