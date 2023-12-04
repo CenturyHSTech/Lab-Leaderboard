@@ -309,7 +309,7 @@ def get_standard_time():
     currentMinute = now.minute
     if currentMinute < 10:
         currentMinute = "0" + str(currentHour)
-    standardTime = str(currentHour) + " : "
+    standardTime = str(currentHour) + ":"
     standardTime += str(currentMinute) + " "
     standardTime += str(AMorPM)
     return standardTime
