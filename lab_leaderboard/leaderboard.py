@@ -4,6 +4,7 @@ and determine how much time is left in a class based on our schedule.
 It will also change the background color based on whether students can
 use a hall pass or not"""
 # imports
+import time
 from datetime import datetime
 from datetime import timedelta
 
@@ -14,6 +15,7 @@ from pytz import timezone
 TZ = timezone("US/Pacific")
 date = datetime.now() + timedelta(days=0)
 datefor = "%s" % date.strftime("%Y-%m-%d")
+
 
 # School Schedules
 MONDAY = {
@@ -242,7 +244,6 @@ def get_schedule_info():
         activity = schedule[1]
         lunchHallDirection = lunchSchedule[0]
         classHallDirection = classSchedule[0]
-        AorB = get_a_or_b_day(get_chs_events())
         if AorB == "A Day":
             period = classSchedule[2]
         elif AorB == "B Day":
@@ -263,13 +264,12 @@ def get_schedule_info():
             + "being held. And it is currently "
             + str(period)
             + " period. It is "
-            + str(passStatus)
-            + " to give passes."
+            + "not allowed"
+            + " to give passes during lunchtime."
         )
     else:
         activity = schedule[1]
         hallDirection = schedule[0]
-        AorB = get_a_or_b_day(get_chs_events())
         if AorB == "A Day":
             period = schedule[2]
         elif AorB == "B Day":
@@ -315,7 +315,13 @@ def get_standard_time():
     return standardTime
 
 
+# define variables
+AorB = get_a_or_b_day(get_chs_events())
+currentSchedule = 1
+
 if __name__ == "__main__":
     print("Here's where we'll test our code.")
     results = get_chs_events()
-    print(get_schedule_info())
+    while True:
+        time.sleep(0.5)
+        print(get_schedule_info())
